@@ -4,19 +4,21 @@ let computerWins = 0;
 
 let userWins = 0;
 
-alert("Let's play Rock, Paper, Scissors!!");
+let computerChoice = computerPlay();
 
-function computerPlay() {
+const computerScore = document.querySelector('#computer');
 
-    return options[random()];
+const buttons = document.querySelectorAll('.buttons');
 
-}
+const userScore = document.querySelector('#user');
 
-function getUserPlay() {
+const winner = document.querySelector('.winner');
 
-    return prompt("Choose one: Rock, Paper, or Scissors..").toLowerCase();
+const winnerButton = document.querySelector('.winner-button')
 
-}
+const resetButton = document.createElement('BUTTON');
+resetButton.classList.add('buttons')
+resetButton.innerText = "PLAY AGAIN";
 
 function random() {
 
@@ -24,76 +26,103 @@ function random() {
 
 }
 
+function computerPlay() {
 
-function game() {
-    
-    let computerChoice = computerPlay();
-    let userPlay = getUserPlay();
-    playRound(userPlay, computerChoice);
+    return options[random()];
 
-    userPlay = getUserPlay();
-    computerChoice = computerPlay();
-    playRound(userPlay, computerChoice);
+}
 
-    userPlay = getUserPlay();
-    computerChoice = computerPlay();
-    playRound(userPlay, computerChoice);
+function checkScore() {
 
-    userPlay = getUserPlay();
-    computerChoice = computerPlay();
-    playRound(userPlay, computerChoice);
+    if (computerWins === 5 || userWins === 5) {
 
-    userPlay = getUserPlay();
-    computerChoice = computerPlay();
-    playRound(userPlay, computerChoice);
+        if (computerWins === 5) {
 
-    if (computerWins > userWins) {
+            winner.textContent = 'Computer Wins! Better luck next time! Play again if you would like...';
 
-        alert("You lose, computer wins! Better luck next time!")
+        } else if (userWins === 5) {
+
+            winner.textContent = "WOW! You win! Play again if you would like...";
+        }
+
+        winnerButton.appendChild(resetButton)
+
+        resetButton.addEventListener('click', resetGame);
 
     } else {
 
-        alert("You win! Computer loses!")
+        return
 
     }
+}
+
+buttons.forEach((button) => {
+
+    button.addEventListener('click', function() {playRound(button.id, computerChoice)});
+
+});
+
+
+function resetGame() {
+
+    userScore.textContent = 0;
+    computerScore.textContent = 0;
+    userWins = 0;
+    computerWins = 0;
+    winnerButton.removeChild(resetButton);
+    winner.textContent = "";
 
 }
 
 function playRound(userPlay, computerChoice) {
 
     while (computerChoice === userPlay) {
-        userPlay = prompt("Its a tie!! Pick again: Rock, Paper, or Scissors");
+
+        userPlay = prompt("Its a tie!! Pick again: Rock, Paper, or Scissors").toString().toLowerCase();
+
+        while (options.indexOf(userPlay) === -1) {
+            
+            userPlay = prompt("You did not choose one of the options, try again!").toString().toLowerCase();
+
+        }
+
         computerChoice = computerPlay();
     }
 
     if (computerChoice === "rock" && userPlay === "scissors") {
 
         computerWins++;
+        computerScore.textContent = computerWins;
 
     } else if (computerChoice === "paper" && userPlay === "rock") {
 
         computerWins++;
+        computerScore.textContent = computerWins;
 
     } else if (computerChoice === "scissors" && userPlay === "paper") {
 
         computerWins++;
+        computerScore.textContent = computerWins;
 
     } else if (computerChoice === "rock" && userPlay === "paper") {
 
         userWins++;
+        userScore.textContent = userWins;
 
     } else if (computerChoice === "paper" && userPlay === "scissors") {
 
         userWins++;
+        userScore.textContent = userWins;
 
     }  else if (computerChoice === "scissors" && userPlay === "rock") {
 
         userWins++;
+        userScore.textContent = userWins;
 
     }
 
-}
+    checkScore()
 
-game();
+}
 
 
