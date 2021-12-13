@@ -17,6 +17,11 @@
     color: red;
 }
 
+.selections {
+    display: flex;
+    gap: 8px;
+}
+
 .winner {
     font-size: 25px;
     font-weight: 900;
